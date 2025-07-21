@@ -11,6 +11,21 @@ Despues de clonar entrar al directorio en que se clonó el proyecto
 ## Instalar dependencias js
 ``npm install && npm run build``
 
+## Configurar la conexión a la base de datos
+Copiar el archivo de variables de entorno
+``cp .env.example .env``
+
+Abrir el archivo `.env` y adecuar los valores
+``
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=usuariodb
+DB_USERNAME=proyectodb
+DB_PASSWORD=clavedb
+``
+
+
 ## Iniciar el servidor de desarrollo
 ``composer run dev``
 
