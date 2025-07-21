@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('secundaria.institucion', function (Blueprint $table) {
             $table->id();
-
+            $table->comment('Instituciones de educación media');
             $table->string('codigo', length: 20)->unique();
             $table->string('direccion', length: 255)->nullable();
             $table->foreignId('sector_id');
             $table->foreignId('distrito_id');
-            $table->foreign('sector_id')->references('id')->on('secundaria.sector');
-            $table->foreign('distrito_id')->references('id')->on('public.distrito');
+            $table->foreign('sector_id')->references('id')->on('secundaria.sector')->onDelete('RESTRICT')->onUpdate('CASCADE');
+            $table->foreign('distrito_id')->references('id')->on('distrito')->onDelete('RESTRICT')->onUpdate('CASCADE');
 
             $table->timestamps();
         });

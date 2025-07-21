@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('secundaria.grupo_ranking', function (Blueprint $table) {
             $table->id();
-
+            $table->comment('Permite agrupar las carreras de bachillerato que deben ser comparadas entre ellas para obtener un ranking de notas. Por ejemplo, para comparar las notas de estudiantes que pertenecen a bachilleratos del área de turismo');
             $table->string('codigo', length: 10)->unique();
             $table->string('descripcion', length: 255)->nullable();
 

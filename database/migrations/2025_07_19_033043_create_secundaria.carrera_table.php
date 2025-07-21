@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('secundaria.carrera', function (Blueprint $table) {
             $table->id();
-
+            $table->comment('Las diferentes opciones de bachillerato');
             $table->string('codigo', length: 10)->unique();
             $table->string('descripcion', length: 255)->nullable();
             $table->foreignId('grupo_ranking_id')->nullable();
-            $table->foreign('grupo_ranking_id')->references('id')->on('secundaria.grupo_ranking');
+            $table->foreign('grupo_ranking_id')->references('id')->on('secundaria.grupo_ranking')->onDelete('RESTRICT')->onUpdate('CASCADE');
 
             $table->timestamps();
         });

@@ -12,9 +12,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('DROP SCHEMA IF EXISTS general CASCADE');
-        DB::statement('CREATE SCHEMA general');
-
         DB::statement('DROP SCHEMA IF EXISTS secundaria CASCADE');
         DB::statement('CREATE SCHEMA secundaria');
 

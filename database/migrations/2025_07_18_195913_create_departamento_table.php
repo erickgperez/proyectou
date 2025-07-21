@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('departamento', function (Blueprint $table) {
             $table->id();
-
+            $table->comment('Catálogo de departamentos del país');
             $table->string('codigo', length: 15)->unique();
             $table->string('descripcion', length: 100)->nullable();
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('distrito', function (Blueprint $table) {
             $table->id();
-
+            $table->comment('Catálogo de distritos');
             $table->string('codigo', length: 20)->unique();
             $table->string('descripcion', length: 100)->nullable();
             $table->foreignId('departamento_id');
