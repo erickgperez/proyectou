@@ -32,7 +32,7 @@ const footerNavItems: NavItem[] = [
 
 <template>
     <Sidebar collapsible="icon" variant="inset">
-        <SidebarHeader>
+        <SidebarHeader class="bg-[#f5f5f9]">
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
@@ -44,11 +44,11 @@ const footerNavItems: NavItem[] = [
             </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent>
+        <SidebarContent class="rounded-tr-xl bg-[#2b2c40] opacity-95">
             <NavMain :items="mainNavItems" />
         </SidebarContent>
 
-        <SidebarFooter>
+        <SidebarFooter class="rounded-br-xl bg-[#2b2c40] opacity-95">
             <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>
