@@ -15,9 +15,9 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <AppShell variant="sidebar" class="mt-7">
+    <AppShell variant="sidebar" class="mt-7 ml-7">
         <AppSidebar />
-        <AppContent variant="sidebar" class="overflow-x-hidden bg-[#f5f5f9]">
+        <AppContent variant="sidebar" class="overflow-x-hidden bg-[#fafafa]">
             <AppSidebarHeader :breadcrumbs="breadcrumbs" />
             <slot />
         </AppContent>

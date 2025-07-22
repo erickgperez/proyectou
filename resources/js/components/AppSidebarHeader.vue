@@ -15,7 +15,7 @@ withDefaults(
 
 <template>
     <header
-        class="fixed top-1 z-20 mx-8 mb-15 flex h-13 w-full shrink-0 items-center gap-2 rounded-lg border border-b border-sidebar-border/70 bg-[#fefeff] px-6 shadow-xl/30 ring-2 shadow-blue-500/50 ring-blue-500 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4"
+        class="fixed top-1 z-20 mb-15 flex h-13 w-full shrink-0 items-center gap-2 rounded-lg border border-b border-sidebar-border/70 bg-[#fefeff] px-6 shadow-xl/30 ring-2 shadow-blue-500/50 ring-blue-500 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4"
     >
         <div class="flex items-center gap-2">
             <SidebarTrigger class="-ml-1" />
