@@ -10,6 +10,7 @@ const user = page.props.auth.user as User;
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];
+    activeTab?: string;
 }
 const drawer = ref(false);
 const group = ref(null);
@@ -26,6 +27,7 @@ watch(group, () => {
 
 withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
+    activeTab: () => 'tab1',
 });
 </script>
 
@@ -45,6 +47,7 @@ withDefaults(defineProps<Props>(), {
                             <v-avatar>
                                 <v-icon color="info" icon="mdi-school" size="x-large"></v-icon>
                             </v-avatar>
+                            {{ activeTab }}
                         </template>
                     </v-list-item>
                 </v-list>
@@ -52,7 +55,10 @@ withDefaults(defineProps<Props>(), {
 
                 <v-list density="compact" nav>
                     <v-list-item prepend-icon="mdi-view-dashboard">
-                        <Link :href="route('dashboard')"> Dashboard </Link>
+                        <Link :href="route('dashboard')" preserve-state preserve-scroll :data="{ tab: activeTab }"> Dashboard </Link>
+                    </v-list-item>
+                    <v-list-item prepend-icon="mdi-cog">
+                        <Link :href="route('profile.edit')" preserve-state preserve-scroll :data="{ tab: activeTab }"> Settings </Link>
                     </v-list-item>
                 </v-list>
             </v-navigation-drawer>
@@ -75,7 +81,16 @@ withDefaults(defineProps<Props>(), {
                             <v-card>
                                 <v-list>
                                     <v-list-item prepend-icon="mdi-cog">
-                                        <Link :href="route('profile.edit')" prefetch as="button"> Settings </Link>
+                                        <Link
+                                            :href="route('profile.edit')"
+                                            prefetch
+                                            as="button"
+                                            :only="['tabContent']"
+                                            preserve-state
+                                            preserve-scroll
+                                        >
+                                            Settings
+                                        </Link>
                                     </v-list-item>
 
                                     <v-list-item prepend-icon="mdi-logout">
@@ -89,7 +104,12 @@ withDefaults(defineProps<Props>(), {
 
                 <v-app-bar-title>Aplicación</v-app-bar-title>
             </v-app-bar>
-            <v-main class="ma-5"><slot /></v-main>
+            <v-main class="ma-5">
+                <div class="tab-content">
+                    <!-- Content rendered by Inertia based on the partial reload -->
+                    <slot />
+                </div>
+            </v-main>
         </v-app>
     </v-responsive>
 </template>
