@@ -1,0 +1,95 @@
+<script setup lang="ts">
+import type { BreadcrumbItemType } from '@/types';
+import { Link, router } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+
+import { type User } from '@/types';
+import { usePage } from '@inertiajs/vue3';
+const page = usePage();
+const user = page.props.auth.user as User;
+
+interface Props {
+    breadcrumbs?: BreadcrumbItemType[];
+}
+const drawer = ref(false);
+const group = ref(null);
+
+const menu = ref(false);
+
+const handleLogout = () => {
+    router.flushAll();
+};
+
+watch(group, () => {
+    drawer.value = false;
+});
+
+withDefaults(defineProps<Props>(), {
+    breadcrumbs: () => [],
+});
+</script>
+
+<template>
+    <v-responsive>
+        <v-app>
+            <v-navigation-drawer
+                :permanent="!drawer"
+                :expand-on-hover="drawer"
+                :rail="drawer"
+                :location="$vuetify.display.mobile ? 'bottom' : undefined"
+                class="bg-blue-grey-darken-2"
+            >
+                <v-list class="text-white">
+                    <v-list-item prepend-icon="mdi-school" subtitle="descripción" title="Nombre Aplicación">
+                        <template v-slot:prepend>
+                            <v-avatar>
+                                <v-icon color="info" icon="mdi-school" size="x-large"></v-icon>
+                            </v-avatar>
+                        </template>
+                    </v-list-item>
+                </v-list>
+                <v-divider></v-divider>
+
+                <v-list density="compact" nav>
+                    <v-list-item prepend-icon="mdi-view-dashboard">
+                        <Link :href="route('dashboard')"> Dashboard </Link>
+                    </v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+            <v-app-bar :elevation="10" rounded="b-xl">
+                <template v-slot:prepend>
+                    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                </template>
+                <template v-slot:append>
+                    <v-list rounded="b-xl">
+                        <v-menu v-model="menu" :close-on-content-click="false" location="bottom center">
+                            <template v-slot:activator="{ props }">
+                                <v-list-item
+                                    prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
+                                    :subtitle="user.email"
+                                    :title="user.name"
+                                    v-bind="props"
+                                ></v-list-item>
+                            </template>
+
+                            <v-card>
+                                <v-list>
+                                    <v-list-item prepend-icon="mdi-cog">
+                                        <Link :href="route('profile.edit')" prefetch as="button"> Settings </Link>
+                                    </v-list-item>
+
+                                    <v-list-item prepend-icon="mdi-logout">
+                                        <Link class="block" method="post" :href="route('logout')" @click="handleLogout" as="button"> Log out </Link>
+                                    </v-list-item>
+                                </v-list>
+                            </v-card>
+                        </v-menu>
+                    </v-list>
+                </template>
+
+                <v-app-bar-title>Aplicación</v-app-bar-title>
+            </v-app-bar>
+            <v-main class="ma-5"><slot /></v-main>
+        </v-app>
+    </v-responsive>
+</template>
