@@ -22,8 +22,7 @@ class ProfileController extends Controller
         return Inertia::render('Home', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
-            'page' => 'settings',
-            'tabDestino' => $request->get('tab')
+            'page' => 'settings'
         ]);
     }
 

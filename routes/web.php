@@ -10,8 +10,7 @@ Route::get('/', function () {
 
 Route::get('dashboard', function (Request $request) {
     return Inertia::render('Home', [
-        'page' => 'dashboard',
-        'tabDestino' => $request->get('tab')
+        'page' => 'dashboard'
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

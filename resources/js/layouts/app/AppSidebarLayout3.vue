@@ -47,7 +47,6 @@ withDefaults(defineProps<Props>(), {
                             <v-avatar>
                                 <v-icon color="info" icon="mdi-school" size="x-large"></v-icon>
                             </v-avatar>
-                            {{ activeTab }}
                         </template>
                     </v-list-item>
                 </v-list>
@@ -55,10 +54,10 @@ withDefaults(defineProps<Props>(), {
 
                 <v-list density="compact" nav>
                     <v-list-item prepend-icon="mdi-view-dashboard">
-                        <Link :href="route('dashboard')" preserve-state preserve-scroll :data="{ tab: activeTab }"> Dashboard </Link>
+                        <Link :href="route('dashboard')" preserve-state preserve-scroll> Dashboard </Link>
                     </v-list-item>
                     <v-list-item prepend-icon="mdi-cog">
-                        <Link :href="route('profile.edit')" preserve-state preserve-scroll :data="{ tab: activeTab }"> Settings </Link>
+                        <Link :href="route('profile.edit')" preserve-state preserve-scroll> Settings </Link>
                     </v-list-item>
                 </v-list>
             </v-navigation-drawer>
