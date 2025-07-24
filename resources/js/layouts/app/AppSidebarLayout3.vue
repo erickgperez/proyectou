@@ -105,10 +105,7 @@ withDefaults(defineProps<Props>(), {
                 <v-app-bar-title>Aplicación</v-app-bar-title>
             </v-app-bar>
             <v-main class="ma-5">
-                <div class="tab-content">
-                    <!-- Content rendered by Inertia based on the partial reload -->
-                    <slot />
-                </div>
+                <slot />
             </v-main>
         </v-app>
     </v-responsive>
