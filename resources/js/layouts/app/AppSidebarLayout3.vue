@@ -53,10 +53,13 @@ withDefaults(defineProps<Props>(), {
                 <v-divider></v-divider>
 
                 <v-list density="compact" nav>
-                    <v-list-item prepend-icon="mdi-view-dashboard">
-                        <Link :href="route('dashboard')" preserve-state preserve-scroll> Dashboard </Link>
+                    <v-list-item prepend-icon="mdi-text-box-multiple-outline" :class="$page.url === '/informe/example' ? 'bg-blue-lighten-4' : ''">
+                        <Link :href="route('informe-example')" preserve-state preserve-scroll> Informe</Link>
                     </v-list-item>
-                    <v-list-item prepend-icon="mdi-cog">
+                    <v-list-item prepend-icon="mdi-form-textbox" :class="$page.url === '/crud/example' ? 'bg-blue-lighten-4' : ''">
+                        <Link :href="route('crud-example')" preserve-state preserve-scroll> CRUD</Link>
+                    </v-list-item>
+                    <v-list-item prepend-icon="mdi-cog" :class="$page.url === '/settings/profile' ? 'bg-blue-lighten-4' : ''">
                         <Link :href="route('profile.edit')" preserve-state preserve-scroll> Settings </Link>
                     </v-list-item>
                 </v-list>

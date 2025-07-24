@@ -14,5 +14,17 @@ Route::get('dashboard', function (Request $request) {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/informe/example', function () {
+    return Inertia::render('Home', [
+        'page' => 'informeExample'
+    ]);
+})->middleware(['auth', 'verified'])->name('informe-example');
+
+Route::get('/crud/example', function () {
+    return Inertia::render('Home', [
+        'page' => 'crudExample'
+    ]);
+})->middleware(['auth', 'verified'])->name('crud-example');
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
