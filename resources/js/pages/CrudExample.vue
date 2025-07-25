@@ -1,72 +1,85 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { onMounted, ref, shallowRef, toRef } from 'vue';
 
 const step = ref(1);
 
 const selectedItem = ref(null);
 const selectedAction = ref('');
 
-const currentTitle = computed(() => {
-    switch (step.value) {
-        case 1:
-            return 'Listado';
-        case 2:
-            return 'Acciones';
-        default:
-            return 'Aplicar acciones';
-    }
-});
+const search = ref('');
 
-const consoles = ref([
-    {
-        name: 'PlayStation 5',
-        manufacturer: 'Sony',
-        year: 2020,
-        sales: '10M',
-        exclusive: true,
-        acciones: null,
-    },
-    {
-        name: 'Xbox Series X',
-        manufacturer: 'Microsoft',
-        year: 2020,
-        sales: '6.5M',
-        exclusive: false,
-        acciones: null,
-    },
-    {
-        name: 'Nintendo Switch',
-        manufacturer: 'Nintendo',
-        year: 2017,
-        sales: '89M',
-        exclusive: true,
-        acciones: null,
-    },
-    {
-        name: 'PlayStation 4',
-        manufacturer: 'Sony',
-        year: 2013,
-        sales: '116M',
-        exclusive: true,
-        acciones: null,
-    },
-    {
-        name: 'Xbox One',
-        manufacturer: 'Microsoft',
-        year: 2013,
-        sales: '50M',
-        exclusive: false,
-        acciones: null,
-    },
-    {
-        name: 'Nintendo Wii',
-        manufacturer: 'Nintendo',
-        year: 2006,
-        sales: '101M',
-        exclusive: true,
-        acciones: null,
-    },
-]);
+const currentYear = new Date().getFullYear();
+
+function createNewRecord() {
+    return {
+        title: '',
+        author: '',
+        genre: '',
+        year: currentYear,
+        pages: 1,
+    };
+}
+
+const books = ref([]);
+const formModel = ref(createNewRecord());
+const dialog = shallowRef(false);
+const isEditing = toRef(() => !!formModel.value.id);
+
+const headers = [
+    { title: 'Título', key: 'title', align: 'start' },
+    { title: 'Autor', key: 'author' },
+    { title: 'Género', key: 'genre' },
+    { title: 'Año', key: 'year', align: 'end' },
+    { title: 'Páginas', key: 'pages', align: 'end' },
+    { title: 'Acciones', key: 'actions', align: 'end', sortable: false },
+];
+
+function add() {
+    formModel.value = createNewRecord();
+    dialog.value = true;
+}
+function edit(id) {
+    const found = books.value.find((book) => book.id === id);
+
+    formModel.value = {
+        id: found.id,
+        title: found.title,
+        author: found.author,
+        genre: found.genre,
+        year: found.year,
+        pages: found.pages,
+    };
+
+    dialog.value = true;
+}
+
+function remove(id) {
+    const index = books.value.findIndex((book) => book.id === id);
+    books.value.splice(index, 1);
+}
+
+function save() {
+    if (isEditing.value) {
+        const index = books.value.findIndex((book) => book.id === formModel.value.id);
+        books.value[index] = formModel.value;
+    } else {
+        formModel.value.id = books.value.length + 1;
+        books.value.push(formModel.value);
+    }
+
+    dialog.value = false;
+}
+function reset() {
+    dialog.value = false;
+    formModel.value = createNewRecord();
+    books.value = [
+        { id: 1, title: 'To Kill a Mockingbird', author: 'Harper Lee', genre: 'Fiction', year: 1960, pages: 281 },
+        { id: 2, title: '1984', author: 'George Orwell', genre: 'Dystopian', year: 1949, pages: 328 },
+        { id: 3, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', genre: 'Fiction', year: 1925, pages: 180 },
+        { id: 4, title: 'Sapiens', author: 'Yuval Noah Harari', genre: 'Non-Fiction', year: 2011, pages: 443 },
+        { id: 5, title: 'Dune', author: 'Frank Herbert', genre: 'Sci-Fi', year: 1965, pages: 412 },
+    ];
+}
 
 const selectItem = (item: any) => {
     selectedItem.value = item;
@@ -77,18 +90,100 @@ const selectAction = (accion: string) => {
     selectedAction.value = accion;
     step.value++;
 };
+
+onMounted(() => {
+    reset();
+});
 </script>
 
 <template>
     <v-window v-model="step" class="h-auto w-100">
         <v-window-item :value="1">
-            <v-card title="Listado de productos">
-                <v-data-table :items="consoles" border="primary thin" class="w-100">
-                    <template v-slot:item.acciones="{ item }">
-                        <v-icon color="green-darken-2" icon="mdi-chevron-right-circle-outline" size="large" @click="selectItem(item)"></v-icon>
+            <v-card>
+                <v-card-title class="d-flex align-center pe-2">
+                    <v-icon icon="mdi-format-list-text"></v-icon> &nbsp; Listado de libros
+
+                    <v-spacer></v-spacer>
+
+                    <v-text-field
+                        v-model="search"
+                        density="compact"
+                        label="Buscar"
+                        prepend-inner-icon="mdi-magnify"
+                        variant="outlined"
+                        rounded="xl"
+                        flat
+                        hide-details
+                        single-line
+                    ></v-text-field>
+                    <v-btn icon="mdi-table-plus" color="success" class="ml-2" title="Agregar nuevo registro" @click="add"></v-btn>
+                    <v-btn icon="mdi-file-export-outline" color="primary" variant="tonal" class="ma-2" title="Exportar"></v-btn>
+                </v-card-title>
+
+                <v-data-table
+                    v-model:search="search"
+                    :headers="headers"
+                    :items="books"
+                    border="primary thin"
+                    class="w-100"
+                    :sort-by="[
+                        { key: 'year', order: 'desc' },
+                        { key: 'name', order: 'asc' },
+                    ]"
+                    multi-sort
+                >
+                    <template v-slot:item.acciones="{ item }"> </template>
+                    <template v-slot:item.actions="{ item }">
+                        <div class="d-flex ga-2 justify-end">
+                            <v-icon color="primary" icon="mdi-pencil" size="small" @click="edit(item.id)"></v-icon>
+
+                            <v-icon color="error" icon="mdi-delete" size="small" @click="remove(item.id)"></v-icon>
+                            <v-icon color="green-darken-2" icon="mdi-chevron-right-circle-outline" size="large" @click="selectItem(item)"></v-icon>
+                        </div>
                     </template>
                 </v-data-table>
             </v-card>
+            <v-dialog v-model="dialog" max-width="500">
+                <v-card :subtitle="`${isEditing ? 'Update' : 'Create'} your favorite book`" :title="`${isEditing ? 'Edit' : 'Add'} a Book`">
+                    <template v-slot:text>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field v-model="formModel.title" label="Title"></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" md="6">
+                                <v-text-field v-model="formModel.author" label="Author"></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" md="6">
+                                <v-select
+                                    v-model="formModel.genre"
+                                    :items="['Fiction', 'Dystopian', 'Non-Fiction', 'Sci-Fi']"
+                                    label="Genre"
+                                ></v-select>
+                            </v-col>
+
+                            <v-col cols="12" md="6">
+                                <v-number-input v-model="formModel.year" :max="currentYear" :min="1" label="Year"></v-number-input>
+                            </v-col>
+
+                            <v-col cols="12" md="6">
+                                <v-number-input v-model="formModel.pages" :min="1" label="Pages"></v-number-input>
+                            </v-col>
+                        </v-row>
+                    </template>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions class="bg-surface-light">
+                        <v-btn text="Cancel" variant="plain" @click="dialog = false"></v-btn>
+
+                        <v-spacer></v-spacer>
+
+                        <v-btn text="Save" @click="save"></v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-window-item>
 
         <v-window-item :value="2">
