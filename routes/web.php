@@ -10,21 +10,30 @@ Route::get('/', function () {
 
 Route::get('dashboard', function (Request $request) {
     return Inertia::render('Home', [
-        'page' => 'dashboard'
+        'componente' => 'dashboard',
+        'titulo' => 'Dashboard',
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/informe/example', function () {
     return Inertia::render('Home', [
-        'page' => 'informeExample'
+        'componente' => 'informeExample',
+        'titulo' => 'Informe de ejemplo',
     ]);
 })->middleware(['auth', 'verified'])->name('informe-example');
 
 Route::get('/crud/example', function () {
     return Inertia::render('Home', [
-        'page' => 'crudExample'
+        'componente' => 'crudExample',
+        'titulo' => 'Ejemplo de CRUD',
     ]);
 })->middleware(['auth', 'verified'])->name('crud-example');
+Route::get('/c', function () {
+    return Inertia::render('Home', [
+        'componente' => '',
+        'titulo' => '',
+    ]);
+})->middleware(['auth', 'verified'])->name('close');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

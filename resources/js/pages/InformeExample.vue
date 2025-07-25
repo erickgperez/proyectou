@@ -30,7 +30,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <v-stepper v-model="step" :items="items" show-actions prev-text="Anterior" next-text="Continuar" alt-labels>
+    <v-stepper v-model="step" :items="items" show-actions prev-text="Anterior" next-text="Continuar" alt-labels color="#333">
         <template v-slot:item.1>
             <h3 class="text-h6">Parámetros para mostrar el informe</h3>
 
