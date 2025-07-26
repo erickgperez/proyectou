@@ -215,7 +215,7 @@ onMounted(() => {
                 <v-row dense>
                     <v-col cols="12" md="12">
                         <span class="text-h6">
-                            <BR />
+                            <br />
                             <span>Elija la acción a realizar</span>
                         </span>
                     </v-col>
