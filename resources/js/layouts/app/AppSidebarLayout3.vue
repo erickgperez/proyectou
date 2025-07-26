@@ -53,15 +53,24 @@ withDefaults(defineProps<Props>(), {
                 <v-divider></v-divider>
 
                 <v-list density="compact" nav>
-                    <v-list-item prepend-icon="mdi-text-box-multiple-outline" :class="$page.url === '/informe/example' ? 'bg-blue-lighten-4' : ''">
-                        <Link :href="route('informe-example')" preserve-state preserve-scroll> Informe</Link>
-                    </v-list-item>
-                    <v-list-item prepend-icon="mdi-form-textbox" :class="$page.url === '/crud/example' ? 'bg-blue-lighten-4' : ''">
-                        <Link :href="route('crud-example')" preserve-state preserve-scroll> CRUD</Link>
-                    </v-list-item>
-                    <v-list-item prepend-icon="mdi-cog" :class="$page.url === '/settings/profile' ? 'bg-blue-lighten-4' : ''">
-                        <Link :href="route('profile.edit')" preserve-state preserve-scroll> Settings </Link>
-                    </v-list-item>
+                    <Link :href="route('informe-example')" preserve-state preserve-scroll>
+                        <v-list-item
+                            prepend-icon="mdi-text-box-multiple-outline"
+                            :class="$page.url === '/informe/example' ? 'bg-blue-lighten-4' : ''"
+                        >
+                            Informe
+                        </v-list-item>
+                    </Link>
+                    <Link :href="route('crud-example')" preserve-state preserve-scroll>
+                        <v-list-item prepend-icon="mdi-form-textbox" :class="$page.url === '/crud/example' ? 'bg-blue-lighten-4' : ''">
+                            CRUD
+                        </v-list-item>
+                    </Link>
+                    <Link :href="route('profile.edit')" preserve-state preserve-scroll>
+                        <v-list-item prepend-icon="mdi-cog" :class="$page.url === '/settings/profile' ? 'bg-blue-lighten-4' : ''">
+                            Configuración
+                        </v-list-item>
+                    </Link>
                 </v-list>
             </v-navigation-drawer>
             <v-app-bar :elevation="10" rounded="b-xl">
