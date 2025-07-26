@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { saveAs } from 'file-saver';
 import { onMounted, ref, shallowRef, toRef } from 'vue';
+import * as XLSX from 'xlsx';
 
 const step = ref(1);
 
@@ -8,7 +10,23 @@ const selectedAction = ref('');
 
 const search = ref('');
 
+const sheetName = ref('Listado de libros');
+const fileName = ref('libros');
+
 const currentYear = new Date().getFullYear();
+
+const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(items.value);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName.value);
+
+    // Generate a binary string
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    // Create a Blob and save the file
+    const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, fileName.value + '.xlsx');
+};
 
 function createNewRecord() {
     return {
@@ -20,7 +38,7 @@ function createNewRecord() {
     };
 }
 
-const books = ref([]);
+const items = ref([]);
 const formModel = ref(createNewRecord());
 const dialog = shallowRef(false);
 const isEditing = toRef(() => !!formModel.value.id);
@@ -39,7 +57,7 @@ function add() {
     dialog.value = true;
 }
 function edit(id) {
-    const found = books.value.find((book) => book.id === id);
+    const found = items.value.find((book) => book.id === id);
 
     formModel.value = {
         id: found.id,
@@ -54,17 +72,17 @@ function edit(id) {
 }
 
 function remove(id) {
-    const index = books.value.findIndex((book) => book.id === id);
-    books.value.splice(index, 1);
+    const index = items.value.findIndex((book) => book.id === id);
+    items.value.splice(index, 1);
 }
 
 function save() {
     if (isEditing.value) {
-        const index = books.value.findIndex((book) => book.id === formModel.value.id);
-        books.value[index] = formModel.value;
+        const index = items.value.findIndex((book) => book.id === formModel.value.id);
+        items.value[index] = formModel.value;
     } else {
-        formModel.value.id = books.value.length + 1;
-        books.value.push(formModel.value);
+        formModel.value.id = items.value.length + 1;
+        items.value.push(formModel.value);
     }
 
     dialog.value = false;
@@ -72,7 +90,7 @@ function save() {
 function reset() {
     dialog.value = false;
     formModel.value = createNewRecord();
-    books.value = [
+    items.value = [
         { id: 1, title: 'To Kill a Mockingbird', author: 'Harper Lee', genre: 'Fiction', year: 1960, pages: 281 },
         { id: 2, title: '1984', author: 'George Orwell', genre: 'Dystopian', year: 1949, pages: 328 },
         { id: 3, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', genre: 'Fiction', year: 1925, pages: 180 },
@@ -102,7 +120,6 @@ onMounted(() => {
             <v-card>
                 <v-card-title class="d-flex align-center pe-2">
                     <v-icon icon="mdi-format-list-text"></v-icon> &nbsp; Listado de libros
-
                     <v-spacer></v-spacer>
 
                     <v-text-field
@@ -117,13 +134,20 @@ onMounted(() => {
                         single-line
                     ></v-text-field>
                     <v-btn icon="mdi-table-plus" color="success" class="ml-2" title="Agregar nuevo registro" @click="add"></v-btn>
-                    <v-btn icon="mdi-file-export-outline" color="primary" variant="tonal" class="ma-2" title="Exportar"></v-btn>
+                    <v-btn
+                        icon="mdi-file-export-outline"
+                        color="primary"
+                        variant="tonal"
+                        class="ma-2"
+                        title="Exportar"
+                        @click="exportToExcel('Listado de libros')"
+                    ></v-btn>
                 </v-card-title>
 
                 <v-data-table
                     v-model:search="search"
                     :headers="headers"
-                    :items="books"
+                    :items="items"
                     border="primary thin"
                     class="w-100"
                     :sort-by="[
